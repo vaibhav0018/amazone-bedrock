@@ -106,9 +106,8 @@ if __name__ == "__main__":
     
     
     
-    
-    
-    
+
+#vaibhav
     
 # docker build -t pdf-reader-admin .
 # docker run -p 8083:8083 -it pdf-reader-admin
