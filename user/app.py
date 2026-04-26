@@ -8,7 +8,7 @@ s3_client = boto3.client("s3")
 BUCKET_NAME = os.getenv("BUCKET_NAME")
 
 ## Bedrock
-from langchain_aws import BedrockEmbeddings, BedrockLLM, ChatBedrock
+from langchain_aws import BedrockEmbeddings, ChatBedrock
 
 ## Text splitter
 from langchain_text_splitters import RecursiveCharacterTextSplitter
@@ -63,7 +63,7 @@ def load_index():
 #     return llm
 
 def get_llm():
-    llm = BedrockLLM(
+    llm = ChatBedrock(
         model_id="anthropic.claude-3-haiku-20240307-v1:0",
         client=bedrock_client,
         model_kwargs={"max_tokens": 300}
