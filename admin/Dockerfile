@@ -1,6 +1,6 @@
 FROM python:3.12.3
 EXPOSE 8083
-WORKDIR /app
+WORKDIR /app    
 COPY requirements.txt ./
 RUN pip install -r requirements.txt
 COPY . ./

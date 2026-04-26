@@ -1,0 +1,24 @@
+version: "3.9"
+
+services:
+  admin:
+    build: ./admin
+    container_name: admin-app
+    ports:
+      - "8083:8083"
+    environment:
+      BUCKET_NAME: vaibhav-learning-bucket
+      AWS_REGION: ap-south-1
+      AWS_DEFAULT_REGION: ap-south-1
+    restart: always
+
+  user:
+    build: ./user
+    container_name: user-app
+    ports:
+      - "8084:8084"
+    environment:
+      BUCKET_NAME: vaibhav-learning-bucket
+      AWS_REGION: ap-south-1
+      AWS_DEFAULT_REGION: ap-south-1
+    restart: always

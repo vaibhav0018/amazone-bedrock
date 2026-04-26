@@ -44,24 +44,29 @@ def getUniqueId():
 #     return True    
 
 def create_vectore_store(documents):
-    folder_path = "/tmp/"
-    index_name = "my_faiss"
+    try:
+        folder_path = "/tmp/"
+        index_name = "my_faiss"
 
-    vectore_store = FAISS.from_documents(documents, bedrock_embeddings)
-    vectore_store.save_local(folder_path=folder_path, index_name=index_name)
+        vectore_store = FAISS.from_documents(documents, bedrock_embeddings)
+        vectore_store.save_local(folder_path=folder_path, index_name=index_name)
 
-    s3_client.upload_file(
-        Filename=f"{folder_path}{index_name}.faiss",
-        Bucket=BUCKET_NAME,
-        Key="my_faiss.faiss"
-    )
-    s3_client.upload_file(
-        Filename=f"{folder_path}{index_name}.pkl",
-        Bucket=BUCKET_NAME,
-        Key="my_faiss.pkl"
-    )
-
+        s3_client.upload_file(
+            Filename=f"{folder_path}{index_name}.faiss",
+            Bucket=BUCKET_NAME,
+            Key="my_faiss.faiss"
+        )
+        s3_client.upload_file(
+            Filename=f"{folder_path}{index_name}.pkl",
+            Bucket=BUCKET_NAME,
+            Key="my_faiss.pkl"
+        )
+        
+        return True
     
+    except Exception as e:
+        st.error(f"An error occurred: {e}")
+        return False
 
 ## split the pages/ text on the pages into chunks
 def split_text(pages, chunk_size, chunk_overlap):
@@ -81,18 +86,18 @@ def main():
             w.write(uploaded_file.getvalue())
             
         loader = PyPDFLoader(saved_file_name)
-        pages = loader.load_and_split()
+        pages = loader.load()
         st.write(f"Total pages are : {len(pages)}")
         
         ## split text
         splitted_docs = split_text(pages, 500, 100)
-        st.write(f"splitted docs lengtg: {len(splitted_docs)}")
+        st.write(f"splitted docs length: {len(splitted_docs)}")
         st.write("================================")
         st.write(splitted_docs[0])
         
         ## vectore store
         st.write("creating ths vector store")
-        result = create_vectore_store(request_id, splitted_docs)
+        result = create_vectore_store(splitted_docs)
 
         if result:
             st.write("hurray")
