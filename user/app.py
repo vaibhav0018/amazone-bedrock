@@ -64,7 +64,7 @@ def load_index():
 
 def get_llm():
     llm = BedrockLLM(
-        model_id="amazon.titan-text-lite-v2:0",
+        model_id="amazon.nova-lite-v1:0",
         client=bedrock_client,
         model_kwargs={"max_tokens": 300}
     )
